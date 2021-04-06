@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: sqldb1
+spec:
+ selector:
+   matchLabels:
+     app: sqldb1
+ template:
+   metadata:
+     labels:
+      app: sqldb1
+
+   spec:
+     containers:
+       - name: cont781
+         image: mysql:5.7
+         ports:
+           - name: port3306
+             containerPort: 3306
+         env:
+           - name: MYSQL_ROOT_PASSWORD
+             value: root
+         volumeMounts:
+           - mountPath: /var/lib/mysql
+             name: myvolume2
+     restartPolicy: Always
+     volumes:
+       - name: myvolume2
+         hostPath:
+          path: /root/mount/files
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqldb1
+spec:
+  type: NodePort
+  selector:
+    app: sqldb1
+  ports:
+    - name: port5000
+      nodePort: 30032
+      protocol: TCP
+      port: 3306
+      targetPort: 3306

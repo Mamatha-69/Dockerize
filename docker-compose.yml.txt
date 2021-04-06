@@ -1,0 +1,18 @@
+version: "2"
+services:
+  app:
+    build: ./app
+    links:
+      - db
+    ports:
+      - 5015:5000
+    volumes:
+      - /root/mount1/myvolume2:/var/lib/mysql
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    container_name: cont781
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d:ro
